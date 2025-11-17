@@ -31,12 +31,12 @@ data class DbConnection(
     val port: Int,
     val type: DbType,
     val initDb: String,
-    val username: String?,
+    val username: String? = null,
     val password: String? = null,
     val enableSsl: Boolean = false,
-    val sslMode: String?,
+    val sslMode: String? = null,
     val enableSslValid: Boolean = false,
-    val sslClientKeyPath: String?,
-    val sslClientCertPath: String?,
-    val sslRootCertPath: String?
+    val sslClientKeyPath: String? = null,
+    val sslClientCertPath: String? = null,
+    val sslRootCertPath: String? = null
 )

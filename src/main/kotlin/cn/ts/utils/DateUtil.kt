@@ -36,6 +36,8 @@ object DateUtil {
         _defaultZeon = zone
     }
 
+    val STANDARD = LocalDateTime.Formats.ISO
+
     val YYYYMMDD_HHMMSS = LocalDateTime.Format {
         year()
         char('-')
