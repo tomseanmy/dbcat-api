@@ -1,6 +1,6 @@
 package cn.ts.configure
 
-import cn.ts.routes.dbConnectRoute
+import cn.ts.routes.dbConnectionRoute
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
@@ -30,6 +30,6 @@ fun Application.configureRouting() {
             call.respondText("ok")
         }
         staticResources("/static", "static")
-        dbConnectRoute()
+        dbConnectionRoute()
     }
 }

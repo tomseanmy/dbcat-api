@@ -1,7 +1,6 @@
 package cn.ts.configure
 
-import cn.ts.service.Greeting
-import cn.ts.service.GreetingImpl
+import cn.ts.service.DbConnectService
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import org.koin.dsl.module
@@ -17,7 +16,7 @@ fun Application.configureDI() {
         slf4jLogger()
 
         modules(module {
-            single<Greeting> { GreetingImpl() }
+            single<DbConnectService> { DbConnectService() }
         })
     }
 }

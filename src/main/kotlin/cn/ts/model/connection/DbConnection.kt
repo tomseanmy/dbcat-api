@@ -1,4 +1,4 @@
-package cn.ts.model.connect
+package cn.ts.model.connection
 
 import cn.ts.model.DbType
 import kotlinx.serialization.Serializable
@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 /**
  * 数据库连接数据类
  * @property id 连接ID
+ * @property group 分组
  * @property name 连接名
  * @property host 连接地址
  * @property port 端口
@@ -24,6 +25,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DbConnection(
     val id: Int,
+    val group: List<String>,
     val name: String,
     val host: String,
     val port: Int,

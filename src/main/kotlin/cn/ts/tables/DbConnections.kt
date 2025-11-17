@@ -1,7 +1,7 @@
 package cn.ts.tables
 
 import cn.ts.configure.tableEncryptor
-import cn.ts.model.connect.DbConnection
+import cn.ts.model.connection.DbConnection
 import cn.ts.model.DbType
 import org.jetbrains.exposed.crypt.encryptedVarchar
 import org.jetbrains.exposed.dao.id.IntIdTable
@@ -9,6 +9,7 @@ import org.jetbrains.exposed.sql.ResultRow
 
 /**
  * 数据库连接表
+ * @property group 分组
  * @property name 连接名
  * @property host 连接地址
  * @property port 端口
@@ -25,6 +26,7 @@ import org.jetbrains.exposed.sql.ResultRow
  * @author tomsean
  */
 object DbConnections : IntIdTable("db_connection") {
+    val group = array<String>("group")
     val name = varchar("name", 100)
     val host = varchar("url", 150)
     val port = integer("port")
@@ -42,6 +44,7 @@ object DbConnections : IntIdTable("db_connection") {
 
 fun ResultRow.toDbConnection() = DbConnection(
     id = this[DbConnections.id].value,
+    group = this[DbConnections.group],
     name = this[DbConnections.name],
     host = this[DbConnections.host],
     port = this[DbConnections.port],

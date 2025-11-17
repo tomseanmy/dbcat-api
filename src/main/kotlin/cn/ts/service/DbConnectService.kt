@@ -1,7 +1,8 @@
 package cn.ts.service
 
-import cn.ts.model.connect.DbConnection
-import cn.ts.model.connect.req.SaveDbConnectReq
+import cn.ts.model.connection.DbConnection
+import cn.ts.model.connection.req.SaveDbConnectionReq
+import cn.ts.model.connection.req.TestDbConnectionReq
 import cn.ts.tables.DbConnections
 import cn.ts.tables.existsById
 import cn.ts.tables.toDbConnection
@@ -19,22 +20,6 @@ import org.koin.core.component.KoinComponent
  */
 class DbConnectService : KoinComponent {
 
-    val selectCols = listOf(
-        DbConnections.id,
-        DbConnections.name,
-        DbConnections.host,
-        DbConnections.port,
-        DbConnections.type,
-        DbConnections.initDb,
-        DbConnections.username,
-        DbConnections.enableSsl,
-        DbConnections.sslMode,
-        DbConnections.enableSslValid,
-        DbConnections.sslClientKeyPath,
-        DbConnections.sslClientCertPath,
-        DbConnections.sslRootCertPath
-    )
-
     /**
      * 获取连接列表
      */
@@ -45,10 +30,12 @@ class DbConnectService : KoinComponent {
 
     /**
      * 创建连接
+     * @param req 保存连接请求参数
      */
-    fun create(req: SaveDbConnectReq): DbConnection = transaction {
+    fun create(req: SaveDbConnectionReq): DbConnection = transaction {
         val id = if (DbConnections.existsById(req.id)) {
             DbConnections.update({ DbConnections.id.eq(req.id) }) {
+                it[group] = req.group
                 it[name] = req.name
                 it[host] = req.host
                 it[port] = req.port
@@ -63,6 +50,7 @@ class DbConnectService : KoinComponent {
             req.id
         } else {
             DbConnections.insertAndGetId {
+                it[group] = req.group
                 it[name] = req.name
                 it[host] = req.host
                 it[port] = req.port
@@ -84,5 +72,13 @@ class DbConnectService : KoinComponent {
      */
     fun delete(ids: List<Int>): Int = transaction {
         DbConnections.deleteWhere { DbConnections.id.inList(ids) }
+    }
+
+    /**
+     * 测试连接
+     * @param req
+     */
+    fun test(req: TestDbConnectionReq) = transaction {
+
     }
 }

@@ -1,4 +1,4 @@
-package cn.ts.model.connect.req
+package cn.ts.model.connection.req
 
 import cn.ts.model.DbType
 import kotlinx.serialization.Serializable
@@ -8,8 +8,9 @@ import kotlinx.serialization.Serializable
  * @author tomsean
  */
 @Serializable
-data class SaveDbConnectReq(
+data class SaveDbConnectionReq(
     val id: Int? = null,
+    val group: List<String>,
     val name: String,
     val host: String,
     val port: Int,
