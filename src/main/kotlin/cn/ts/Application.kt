@@ -2,7 +2,7 @@ package cn.ts
 
 import cn.ts.configure.configureDI
 import cn.ts.configure.configureDatabases
-import cn.ts.configure.configureMq
+import cn.ts.configure.configureDbcat
 import cn.ts.configure.configureHTTP
 import cn.ts.configure.configureMonitoring
 import cn.ts.configure.configureRedisson
@@ -19,8 +19,8 @@ fun main(args: Array<String>) {
 
 fun Application.module() {
     configureDI()
+    configureDbcat()
     configureRedisson()
-    configureMq()
     configureSockets()
     configureSerialization()
     configureDatabases()
@@ -28,4 +28,5 @@ fun Application.module() {
     configureSecurity()
     configureHTTP()
     configureRouting()
+
 }

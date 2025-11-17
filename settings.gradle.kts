@@ -1,4 +1,4 @@
-rootProject.name = "ktemp"
+rootProject.name = "dbcat-api"
 
 dependencyResolutionManagement {
     repositories {

@@ -14,10 +14,10 @@ ktor:
 
 # 数据库配置
 db:
-  url: ${DB_URL:jdbc:postgresql://localhost/default}
-  user: ${DB_USER:username}
-  password: ${DB_PASSWORD:password}
-  driver-name: ${DB_DRIVER:org.postgresql.Driver}
+  url: ${DB_URL}
+  user: ${?DB_USER}
+  password: ${?DB_PASSWORD}
+  driver-name: ${DB_DRIVER:org.sqlite.JDBC}
   pool: ${DB_POOL:20}
   max-pool: ${DB_MAX_POOL:20}
   max-lifetime: ${DB_MAX_LIFETIME:60000}
@@ -33,11 +33,5 @@ redis:
   db: ${REDIS_DB:0}
   timeout: ${REDIS_TIMEOUT:10000}
 
-# mq配置
-mq:
-  enable: ${MQ_ENABLE:false}
-  url: ${?MQ_URL}
-  default-name: ${?MQ_DEFAULT_NAME}
-  thread-poll-size: ${?MQ_THREAD_POLL_SIZE}
-  tls-enable: ${MQ_TLS_ENABLE:false}
-
+dbcat:
+  secret: ${DBCAT_SECRET:m64Ads7vARPYPfl0ViUnneiW}

@@ -12,6 +12,7 @@ application {
 }
 
 dependencies {
+    implementation(libs.sqlite.jdbc)
     implementation(libs.javamoney)
     implementation(libs.ktor.server.rabbitmq)
     implementation(libs.ktor.server.core)

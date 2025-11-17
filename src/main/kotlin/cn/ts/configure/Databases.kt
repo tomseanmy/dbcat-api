@@ -1,22 +1,24 @@
 package cn.ts.configure
 
+import cn.ts.tables.DbConnections
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.server.application.*
 import io.ktor.server.config.tryGetString
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.DatabaseConfig
+import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 
 fun Application.configureDatabases() {
     val dbConfig = environment.config.config("db")
     val url = dbConfig.tryGetString("url")
-    val driver = dbConfig.tryGetString("driver")
+    val driver = dbConfig.tryGetString("driver-name")
     val user = dbConfig.tryGetString("user")
     val password = dbConfig.tryGetString("password")
     val poolSize = dbConfig.tryGetString("pool")?.toInt() ?: 20
     val maxPoolSize = dbConfig.tryGetString("max-pool")?.toInt()
     val maxLifetime = dbConfig.tryGetString("max-lifetime")?.toLong()
-    if (url == null || driver == null || user == null || password == null) {
+    if (url == null || driver == null) {
         throw Exception("Please specify database connection details.")
     }
     val db = Database.connect(HikariDataSource().apply {
@@ -32,6 +34,8 @@ fun Application.configureDatabases() {
     })
     transaction(db) {
         // 自动创建数据表
-        // SchemaUtils.create()
+         SchemaUtils.create(
+             DbConnections,
+         )
     }
 }

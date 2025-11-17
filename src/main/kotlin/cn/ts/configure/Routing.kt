@@ -1,5 +1,6 @@
 package cn.ts.configure
 
+import cn.ts.routes.dbConnectRoute
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
@@ -9,7 +10,6 @@ import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sse.*
-import io.ktor.sse.*
 
 fun Application.configureRouting() {
     install(SSE)
@@ -27,12 +27,9 @@ fun Application.configureRouting() {
     }
     routing {
         get("/") {
-            call.respondText("Hello World!")
+            call.respondText("ok")
         }
-        // Static plugin. Try to access `/static/index.html`
         staticResources("/static", "static")
-//        sse("/hello") {
-//            send(ServerSentEvent("world"))
-//        }
+        dbConnectRoute()
     }
 }

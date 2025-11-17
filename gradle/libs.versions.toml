@@ -11,8 +11,10 @@ redisson = "3.50.0"
 koin = "4.1.2-Beta1"
 javamoney = "1.4.5"
 kotlinx-datetime = "0.7.1"
+sqlite-jdbc = "3.49.1.0"
 
 [libraries]
+sqlite-jdbc = { module = "org.xerial:sqlite-jdbc", version.ref = "sqlite-jdbc" }
 javamoney = { module = "org.javamoney:moneta", version.ref = "javamoney" }
 redisson = { module = "org.redisson:redisson", version.ref = "redisson" }
 hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
