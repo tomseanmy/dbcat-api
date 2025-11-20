@@ -10,32 +10,11 @@ import cn.ts.configure.configureSecurity
 import cn.ts.configure.configureSerialization
 import cn.ts.configure.configureSockets
 import io.ktor.server.application.Application
-import io.ktor.server.cio.CIO
-import io.ktor.server.engine.CommandLineConfig
-import io.ktor.server.engine.applicationEnvironment
-import io.ktor.server.engine.configure
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.engine.loadCommonConfiguration
+import io.ktor.server.netty.EngineMain
 
-fun main(args: Array<String>) {
-    println("start main")
-    embeddedServer(
-        factory = CIO,
-        environment = applicationEnvironment {
-            configure(*args)
-        },
-        configure = {
-            val cliConfig = CommandLineConfig(args)
-            takeFrom(cliConfig.engineConfig)
-            loadCommonConfiguration(cliConfig.rootConfig.environment.config)
-        }
-    ) {
-        module()
-    }.start(wait = true)
-}
+fun main(args: Array<String>) = EngineMain.main(args)
 
 fun Application.module() {
-    println("load module")
     configureDI()
     configureDbcat()
     configureSockets()

@@ -1,4 +1,7 @@
 ktor:
+  application:
+    modules:
+      - cn.ts.ApplicationKt.module
   deployment:
     port: ${PORT:8080}
     connectionGroupSize: ${CONNECTION_GROUP_SIZE:2}

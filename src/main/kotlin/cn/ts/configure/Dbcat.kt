@@ -4,10 +4,6 @@ import io.ktor.server.application.Application
 import io.ktor.server.config.tryGetString
 import org.jetbrains.exposed.crypt.Algorithms
 import org.jetbrains.exposed.crypt.Encryptor
-import java.security.NoSuchAlgorithmException
-import java.util.Base64
-import javax.crypto.KeyGenerator
-import javax.crypto.SecretKey
 
 val tableEncryptor: Encryptor
     get() = _tableEncryptor

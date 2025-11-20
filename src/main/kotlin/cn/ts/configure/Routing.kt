@@ -29,10 +29,7 @@ fun Application.configureRouting() {
         }
     }
     routing {
-        println("routing")
         get("/") {
-            println("hello")
-            log.info("hello")
             call.respondText("ok")
         }
         staticResources("/static", "static")
