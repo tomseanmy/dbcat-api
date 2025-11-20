@@ -126,28 +126,6 @@ class DBOperationPostgres : DBOperation {
             is LocalDateTime -> JsonPrimitive(value.format(STANDARD))
             is LocalDate -> JsonPrimitive(value.format(YYYYMMDD))
 
-            // SQL 数组
-            is SqlArray -> {
-                val arr = try { value.array as? Array<*> } catch (_: Throwable) { null }
-                if (arr != null) {
-                    JsonArray(arr.map { anyToJsonElement(it) })
-                } else {
-                    // JDBC 驱动可能返回原生数组或 List
-                    val obj = try { value.array } catch (_: Throwable) { null }
-                    when (obj) {
-                        null -> JsonNull
-                        is Iterable<*> -> JsonArray(obj.map { anyToJsonElement(it) })
-                        is Array<*> -> JsonArray(obj.map { anyToJsonElement(it) })
-                        else -> throw IllegalArgumentException("Unsupported SQL array type: ${obj::class.simpleName}")
-                    }
-                }
-            }
-
-            // 二进制/大文本
-            is ByteArray -> JsonPrimitive(value.joinToString(separator = ",", prefix = "[", postfix = "]"))
-            is Blob -> JsonPrimitive("<BLOB size=" + (try { value.length() } catch (_: Throwable) { -1 }) + ">")
-            is Clob -> JsonPrimitive("<CLOB size=" + (try { value.length() } catch (_: Throwable) { -1 }) + ">")
-
             // PG JSON/JSONB 等特殊对象在 UnknownDbValue 的序列化器中处理
             else -> throw IllegalArgumentException("Unsupported SQL array type: ${value::class.simpleName}")
         }

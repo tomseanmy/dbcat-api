@@ -1,4 +1,7 @@
 ktor:
+  application:
+    modules:
+      - cn.ts.ApplicationKt.module
   deployment:
     port: ${PORT:8080}
     connectionGroupSize: ${CONNECTION_GROUP_SIZE:2}
@@ -7,11 +10,9 @@ ktor:
     shutdownGracePeriod: ${SHUTDOWN_GRACE_PERIOD:2000}
     shutdownTimeout: ${SHUTDOWN_TIMEOUT:3000}
 
-  development: true
-
 # 数据库配置
 db:
-  url: ${DB_URL}
+  url: jdbc:sqlite:/Users/tomsean/Desktop/data.db
   user: ${?DB_USER}
   password: ${?DB_PASSWORD}
   driver-name: ${DB_DRIVER:org.sqlite.JDBC}
@@ -31,4 +32,4 @@ redis:
   timeout: ${REDIS_TIMEOUT:10000}
 
 dbcat:
-  secret: m64Ads7vARPYPfl0ViUnneiW
+  secret: ${DBCAT_SECRET:m64Ads7vARPYPfl0ViUnneiW}

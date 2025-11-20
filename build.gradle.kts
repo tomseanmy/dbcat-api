@@ -1,20 +1,26 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.ktor)
+    alias(libs.plugins.build.native)
     alias(libs.plugins.kotlin.plugin.serialization)
+
 }
 
 group = "cn.ts"
 version = "0.0.1"
 
 application {
-    mainClass = "io.ktor.server.cio.EngineMain"
+    mainClass = "cn.ts.ApplicationKt"
+}
+
+kotlin {
+    jvmToolchain(21)
 }
 
 dependencies {
     implementation(libs.sqlite.jdbc)
     implementation(libs.javamoney)
-    implementation(libs.ktor.server.rabbitmq)
+    //implementation(libs.ktor.server.rabbitmq)
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.websockets)
     implementation(libs.koin.ktor)
@@ -22,7 +28,7 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.server.content.negotiation)
     implementation(libs.hikari)
-    implementation(libs.redisson)
+    //implementation(libs.redisson)
     implementation(libs.postgresql)
     implementation(libs.exposed.core)
     implementation(libs.exposed.jdbc)
@@ -53,4 +59,97 @@ dependencies {
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
 
+}
+
+graalvmNative {
+    binaries {
+        named("main") {
+            fallback.set(false)
+            verbose.set(true)
+
+            buildArgs.add("--initialize-at-build-time=ch.qos.logback")
+            buildArgs.add("--initialize-at-build-time=io.ktor,kotlin")
+            buildArgs.add("--initialize-at-build-time=org.slf4j.LoggerFactory")
+
+            buildArgs.add("--initialize-at-build-time=org.slf4j.helpers.Reporter")
+            buildArgs.add("--initialize-at-build-time=kotlinx.io.bytestring.ByteString")
+            buildArgs.add("--initialize-at-build-time=kotlinx.io.SegmentPool")
+
+            buildArgs.add("--initialize-at-build-time=kotlinx.serialization.json.Json")
+            buildArgs.add("--initialize-at-build-time=kotlinx.serialization.json.JsonImpl")
+            buildArgs.add("--initialize-at-build-time=kotlinx.serialization.json.ClassDiscriminatorMode")
+            buildArgs.add("--initialize-at-build-time=kotlinx.serialization.modules.SerializersModuleKt")
+
+            buildArgs.add("-H:+InstallExitHandlers")
+            buildArgs.add("-H:+ReportUnsupportedElementsAtRuntime")
+            buildArgs.add("-H:+ReportExceptionStackTraces")
+
+        }
+    }
+}
+
+
+graalvmNative {
+    binaries {
+        named("main") {
+            fallback.set(false)
+            verbose.set(true)
+
+            buildArgs.add("--initialize-at-build-time=ch.qos.logback")
+            buildArgs.add("--initialize-at-build-time=io.ktor,kotlin")
+            buildArgs.add("--initialize-at-build-time=org.slf4j.LoggerFactory")
+
+            buildArgs.add("--initialize-at-build-time=org.slf4j.helpers.Reporter")
+            buildArgs.add("--initialize-at-build-time=kotlinx.io.bytestring.ByteString")
+            buildArgs.add("--initialize-at-build-time=kotlinx.io.SegmentPool")
+
+            buildArgs.add("--initialize-at-build-time=kotlinx.serialization.json.Json")
+            buildArgs.add("--initialize-at-build-time=kotlinx.serialization.json.JsonImpl")
+            buildArgs.add("--initialize-at-build-time=kotlinx.serialization.json.ClassDiscriminatorMode")
+            buildArgs.add("--initialize-at-build-time=kotlinx.serialization.modules.SerializersModuleKt")
+
+            buildArgs.add("-H:+InstallExitHandlers")
+            buildArgs.add("-H:+ReportUnsupportedElementsAtRuntime")
+            buildArgs.add("-H:+ReportExceptionStackTraces")
+
+            imageName.set("graalvm-server")
+        }
+
+        named("test") {
+            fallback.set(false)
+            verbose.set(true)
+
+            buildArgs.add("--initialize-at-build-time=ch.qos.logback")
+            buildArgs.add("--initialize-at-build-time=io.ktor,kotlin")
+            buildArgs.add("--initialize-at-build-time=org.slf4j.LoggerFactory")
+
+            buildArgs.add("--initialize-at-build-time=org.slf4j.helpers.Reporter")
+            buildArgs.add("--initialize-at-build-time=kotlinx.io.bytestring.ByteString")
+            buildArgs.add("--initialize-at-build-time=kotlinx.io.SegmentPool")
+
+            buildArgs.add("--initialize-at-build-time=kotlinx.serialization.json.Json")
+            buildArgs.add("--initialize-at-build-time=kotlinx.serialization.json.JsonImpl")
+            buildArgs.add("--initialize-at-build-time=kotlinx.serialization.json.ClassDiscriminatorMode")
+            buildArgs.add("--initialize-at-build-time=kotlinx.serialization.modules.SerializersModuleKt")
+            buildArgs.add("--initialize-at-build-time=kotlinx.serialization.internal.PrimitivesKt,kotlinx.serialization.internal.NothingSerialDescriptor")
+            buildArgs.add("--initialize-at-build-time=kotlinx.io.files.PathsJvmKt,kotlinx.io.files.FileSystemJvmKt")
+
+            buildArgs.add("-H:+InstallExitHandlers")
+            buildArgs.add("-H:+ReportUnsupportedElementsAtRuntime")
+            buildArgs.add("-H:+ReportExceptionStackTraces")
+
+            val path = "${projectDir}/src/test/resources/META-INF/native-image/"
+            buildArgs.add("-H:ReflectionConfigurationFiles=${path}reflect-config.json")
+            buildArgs.add("-H:ResourceConfigurationFiles=${path}resource-config.json")
+
+            imageName.set("graalvm-test-server")
+        }
+    }
+
+    tasks.withType<Test>().configureEach {
+        useJUnitPlatform()
+        testLogging {
+            events("passed", "skipped", "failed")
+        }
+    }
 }

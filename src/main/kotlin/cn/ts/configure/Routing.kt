@@ -17,6 +17,9 @@ fun Application.configureRouting() {
         exception<Throwable> { call, cause ->
             call.respondText(text = "500: $cause", status = HttpStatusCode.InternalServerError)
         }
+        status(HttpStatusCode.NotFound) { call, status ->
+            call.respondText(text = "404: $status", status = status)
+        }
     }
     install(RequestValidation) {
         validate<String> { bodyText ->
@@ -26,7 +29,10 @@ fun Application.configureRouting() {
         }
     }
     routing {
+        println("routing")
         get("/") {
+            println("hello")
+            log.info("hello")
             call.respondText("ok")
         }
         staticResources("/static", "static")
